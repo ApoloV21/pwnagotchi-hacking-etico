@@ -1,0 +1,14 @@
+[main]
+name = "pwnagotchi"
+lang = "en"
+whitelist = ["FAMILIA VEGA", "FAMILIA VEGA_5G", "Repetidor_Chiriap"]
+handshakes = "/home/pi/handshakes"
+
+[main.personality]
+advertise = true
+deauth = true
+associate = true
+channels = []
+
+[ui.display]
+enabled = false
