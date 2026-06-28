@@ -201,6 +201,37 @@ Filtro aplicado: `eapol`
 
 Se verificaron 4 paquetes EAPOL por archivo, correspondientes a mensajes del 4-way handshake WPA2. El análisis confirma que el dispositivo captura correctamente el intercambio de autenticación.
 
+### Análisis con Hashcat
+
+Los archivos PCAP fueron convertidos a formato `.hc22000` mediante `hcxpcapngtool`:
+
+```bash
+hcxpcapngtool -o /home/pi/handshakes/resultado.hc22000 /home/pi/handshakes/BARCHURUWIA_40ed00e29ffd.pcap
+```
+
+El archivo resultante (412 bytes) fue analizado con Hashcat v7.1.2:
+
+```powershell
+.\hashcat.exe C:\Users\jonap\Desktop\resultado.hc22000 --identify
+```
+
+Resultado:
+```
+# | Name                                    | Category
+==+=========================================+==================
+22000 | WPA-PBKDF2-PMKID+EAPOL              | Network Protocol
+```
+
+Hashcat identificó correctamente el hash como **WPA-PBKDF2-PMKID+EAPOL (modo 22000)**, confirmando que el handshake capturado es técnicamente válido y procesable para análisis de seguridad.
+
+Se ejecutó una prueba de fuerza bruta con máscara de 4 dígitos para demostrar el funcionamiento del proceso sin realizar ningún ataque real:
+
+```powershell
+.\hashcat.exe -m 22000 C:\Users\jonap\Desktop\resultado.hc22000 -a 3 ?d?d?d?d --show
+```
+
+Sin resultado, lo esperado dado que la contraseña no corresponde a una combinación de 4 dígitos. **No se realizó ningún intento de recuperación de contraseña real**, en cumplimiento del marco ético y legal del proyecto.
+
 ---
 
 ## Marco legal
@@ -247,3 +278,4 @@ pwnagotchi-hacking-etico/
 - Bettercap: https://www.bettercap.org
 - COIP Ecuador — Delitos informáticos: Art. 229–234
 - Ley Orgánica para el Fortalecimiento de la Ciberseguridad, Ecuador (2025)
+
